@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Calculator</string>
+    <string name="clear">Clear all</string>
+    <string name="backspace">Delete last digit</string>
+    <string name="toggle_sign">Change sign</string>
+    <string name="percent">Percent</string>
+    <string name="divide">Divide</string>
+    <string name="multiply">Multiply</string>
+    <string name="subtract">Subtract</string>
+    <string name="add">Add</string>
+    <string name="decimal">Decimal point</string>
+    <string name="equals">Equals</string>
+    <string name="error_recovery">Press AC to clear</string>
+    <string name="history_title">Calculation History</string>
+    <string name="clear_history">Clear history</string>
+    <string name="empty_history">No calculations yet</string>
+    <string name="empty_history_sub">Your recent calculations will appear here</string>
+    <string name="history_button_description">View calculation history</string>
+</resources>
