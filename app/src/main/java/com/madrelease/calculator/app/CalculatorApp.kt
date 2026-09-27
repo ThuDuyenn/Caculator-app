@@ -37,9 +37,15 @@ fun CalculatorApp(
         colorScheme = IosDarkColorScheme
     ) {
         val state by calculatorViewModel.state.collectAsState()
+        val isBuggyFeatureEnabled by calculatorViewModel.isBuggyFeatureEnabled.collectAsState()
+
         CalculatorScreen(
             state = state,
-            onAction = calculatorViewModel::onAction
+            onAction = calculatorViewModel::onAction,
+            isBuggyFeatureEnabled = isBuggyFeatureEnabled,
+            onTriggerCrash = calculatorViewModel::triggerFatalCrashDemo,
+            onRefreshConfig = calculatorViewModel::fetchRemoteConfig
         )
     }
 }
+

@@ -14,6 +14,13 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -46,6 +53,9 @@ import kotlin.math.abs
 fun CalculatorScreen(
     state: CalculatorState,
     onAction: (CalculatorAction) -> Unit,
+    isBuggyFeatureEnabled: Boolean = true,
+    onTriggerCrash: () -> Unit = {},
+    onRefreshConfig: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var showHistorySheet by rememberSaveable { mutableStateOf(false) }
@@ -60,14 +70,15 @@ fun CalculatorScreen(
                 .safeDrawingPadding()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            // iOS Top Bar: History list icon on Top Left
+            // iOS Top Bar: History list icon bên trái + Khu vực Demo Hotfix bên phải
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 4.dp),
-                horizontalArrangement = Arrangement.Start,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Nút History bên trái
                 IconButton(
                     onClick = { showHistorySheet = true },
                     modifier = Modifier.size(44.dp)
@@ -103,7 +114,65 @@ fun CalculatorScreen(
                         )
                     }
                 }
+
+                // KHU VỰC THỬ NGHIỆM HOTFIX & CRASHLYTICS (PHẦN 3 DEMO)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    if (isBuggyFeatureEnabled) {
+                        // KHI CỜ REMOTE CONFIG = TRUE: Nút tính năng mới gặp lỗi Fatal Crash
+                        Button(
+                            onClick = onTriggerCrash,
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF453A)),
+                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 2.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            modifier = Modifier.height(32.dp)
+                        ) {
+                            Text(
+                                text = "⚡ Cloud Sync (Bug)",
+                                fontSize = 11.sp,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    } else {
+                        // KHI CỜ REMOTE CONFIG = FALSE: Nút đã bị vô hiệu hóa an toàn bởi Kill-Switch!
+                        Surface(
+                            shape = RoundedCornerShape(16.dp),
+                            color = Color(0xFF30D158).copy(alpha = 0.15f),
+                            border = BorderStroke(1.dp, Color(0xFF30D158)),
+                            modifier = Modifier.height(32.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "🛡️ Hotfixed (Safe Mode)",
+                                    fontSize = 11.sp,
+                                    color = Color(0xFF30D158),
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
+                    }
+
+                    // Nút cập nhật tức thì Remote Config để Duyên thao tác trực tiếp trên màn hình demo
+                    IconButton(
+                        onClick = onRefreshConfig,
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh Remote Config",
+                            tint = Color(0xFFA5A5A5),
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
             }
+
 
             // Display Area with swipe-to-backspace gesture
             var totalDrag by remember { mutableFloatStateOf(0f) }

@@ -376,4 +376,14 @@ class CalculatorEngine {
         expressionPrefix = ""
         state = state.copy(displayValue = "Error", isError = true)
     }
+
+    /**
+     * Trigger a simulated fatal crash for Part 3 Demo (Crashlytics, Crash Report, Hotfix).
+     * Throws an uncaught ArithmeticException within the calculator calculation engine to verify
+     * OS process termination, two-phase crash logging, and R8 stack trace deobfuscation.
+     */
+    fun triggerSimulatedEngineCrash() {
+        throw ArithmeticException("FATAL CRASH DEMO: Uncaught division overflow in CalculatorEngine cloud sync pipeline!")
+    }
 }
+
