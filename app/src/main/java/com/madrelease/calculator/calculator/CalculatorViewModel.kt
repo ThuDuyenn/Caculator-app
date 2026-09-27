@@ -47,12 +47,23 @@ class CalculatorViewModel(
                     val isEnabled = remoteConfig.getBoolean("feature_cloud_sync_enabled")
                     _isBuggyFeatureEnabled.value = isEnabled
                     setCrashlyticsCustomKey("feature_cloud_sync_enabled", isEnabled)
+                    Log.i("RemoteConfigHotfix", "Fetched from Firebase Remote Config: $isEnabled")
+                } else {
+                    toggleFeatureFlagForLocalDemo()
                 }
             }
         } catch (e: Exception) {
-            Log.w("CalculatorViewModel", "Failed to fetch Remote Config: ${e.message}")
+            Log.w("CalculatorViewModel", "Remote Config offline fallback: ${e.message}")
+            toggleFeatureFlagForLocalDemo()
         }
     }
+
+    fun toggleFeatureFlagForLocalDemo() {
+        _isBuggyFeatureEnabled.value = !_isBuggyFeatureEnabled.value
+        setCrashlyticsCustomKey("feature_cloud_sync_enabled", _isBuggyFeatureEnabled.value)
+        Log.i("RemoteConfigHotfix", "Feature flag set to: ${_isBuggyFeatureEnabled.value}")
+    }
+
 
     fun onAction(action: CalculatorAction) {
         // TỰ ĐỘNG GHI BREADCRUMBS VÀO CRASHLYTICS TRƯỚC KHI THỰC THI LOGIC
@@ -79,12 +90,12 @@ class CalculatorViewModel(
             is CalculatorAction.ClearHistory -> "User cleared history"
             is CalculatorAction.RestoreHistory -> "User restored history: ${action.item.expression}"
         }
+        Log.i("CrashlyticsBreadcrumb", logMessage)
         try {
             FirebaseCrashlytics.getInstance().log(logMessage)
-        } catch (e: Exception) {
-            Log.d("CrashlyticsBreadcrumb", logMessage)
-        }
+        } catch (_: Exception) {}
     }
+
 
     private fun setCrashlyticsCustomKey(key: String, value: Any) {
         try {
