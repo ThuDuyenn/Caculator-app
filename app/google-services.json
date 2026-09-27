@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "104829104829",
+    "project_number": "256683912485",
     "project_id": "mad-release-calculator",
-    "storage_bucket": "mad-release-calculator.appspot.com"
+    "storage_bucket": "mad-release-calculator.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:104829104829:android:a1b2c3d4e5f67890",
+        "mobilesdk_app_id": "1:256683912485:android:874ed40aecdfc43f53becc",
         "android_client_info": {
           "package_name": "com.madrelease.calculator"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDummyKeyForBuildVerification123456"
+          "current_key": "AIzaSyDXL7Oi86hvbUYN8RhBHGXq17ngKd7WX6E"
         }
       ],
       "services": {
